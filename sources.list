@@ -1,0 +1,15 @@
+deb http://ftp.kaist.ac.kr/debian bullseye main contrib non-free
+deb-src http://ftp.kaist.ac.kr/debian bullseye main contrib non-free
+
+deb http://ftp.kaist.ac.kr/debian bullseye-updates main contrib non-free
+deb-src http://ftp.kaist.ac.kr/debian bullseye-updates main contrib non-free
+
+deb http://ftp.kaist.ac.kr/debian bullseye-backports main contrib non-free
+deb-src http://ftp.kaist.ac.kr/debian bullseye-backports main contrib non-free
+
+# security updates
+deb http://ftp.kaist.ac.kr/debian-security/ bullseye-security main contrib non-free
+deb-src http://ftp.kaist.ac.kr/debian-security/ bullseye-security main contrib non-free
+
+# ProxMox No Subscription​
+deb http://download.proxmox.com/debian/pve bullseye pve-no-subscription

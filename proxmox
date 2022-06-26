@@ -1,0 +1,76 @@
+#!/bin/bash
+set -e
+
+# Define Function
+ErrorCheck()
+{
+ NOW=$(date +"%Y-%m-%d %T")
+ $1 #Command execution
+ if [ $? -eq 0 ]; then
+  echo "[$NOW]" $2 OK
+  sleep 1
+ fi
+}
+
+# Script Start
+ErrorCheck 'rm -r /etc/apt/sources.list.d/pve-enterprise.list' 'Delete Proxmox Subscription' #Delete Proxmox Subscription
+ErrorCheck 'mv /etc/apt/sources.list /etc/apt/sources.list_bak' 'Sources.list Backup' #Sources.list Backup
+ErrorCheck 'cp /tmp/proxmox/Proxmox/sources.list /etc/apt/' 'Sources.list Copy' #Sources.list Copy
+ErrorCheck 'apt update' 'Apt Repository Update' # Apt Repository Update
+ErrorCheck 'apt -y upgrade' 'Apt Repository Upgrade' #  Apt Repository Upgrade
+ErrorCheck 'mv /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js.bak' 'Proxmoxlib Backup'’ #Proxmoxlib Backup
+ErrorCheck 'cp /tmp/proxmox/Proxmox/proxmoxlib.js /usr/share/javascript/proxmox-widget-toolkit/' 'Subscription Poup Delete' # Subscription Poup Delete
+ErrorCheck 'systemctl restart pveproxy.service' 'Pveproxy Service Restart' # Pveproxy Service Restart
+#ErrorCheck 'cp /tmp/proxmox/Windows10.iso /var/lib/vz/template/iso/' 'Windows10 ISO Upload'
+#ErrorCheck 'cp /tmp/proxmox/Xpenology920P.img /var/lib/vz/template/iso/' 'Xpenology920P img Upload'
+#ErrorCheck 'cp /tmp/proxmox/Windows11.iso /var/lib/vz/template/iso/' 'Windows11 ISO Upload'
+
+#clear
+echo '===================================================================================================='
+echo 'You need to create a VM and check the list!!'
+echo '- check the storage name : storage.os and storage.nas'
+echo '- HDD: SATA 1'
+echo '- Network: VMware vmxnet3'
+echo '===================================================================================================='
+echo 'Can I proceed with Iport Disk? (yes/no) : '
+read answer
+
+#qm importdisk 103 /var/lib/vz/template/iso/Xpenology920P.img storage.os # Import DSM920+ Disk
+qm importdisk 103 /tmp/proxmox/Proxmox/Xpenology920P.img storage.os # Import DSM920+ Disk
+echo 'Can I proceed with DSM Install? (yes/no) : '
+read answer
+
+clear
+echo '===================================================================================================='
+echo 'Check the list before starting DSM920+ !!'
+echo '- Hardware -> Unused Disk -> SATA 0 Mount'
+echo '- Options -> Boot Order -> SATA 0, SATA 1, Other SATA, NetWork'
+echo ''
+echo 'Start DSM and check the ip with the command : ifconfig'
+echo 'Connect to mobaxterm and install DSM920+ (ID:tc / PW:P@ssw0rd)'
+echo '- wget https://github.com/PeterSuh-Q3/tinycore-redpill/raw/main/myv.sh.gz; tar -zxvf myv.sh.gz;'
+echo '- ./myv.sh DS920+'
+echo '- vmxnet3 Network Driver Install'
+echo '- cat user_config.json'
+echo 'Enter your mac address and Poweroff '
+read mac
+echo 'Check before starting the VM : Network MAC Change, Add Serial Port'
+echo '- Network MAC Change : ' $mac
+echo '- Hardware -> Add Serial Port'
+echo '- Start VM -> Console -> noVNC -> xterm.js -> root login -> ip a'
+echo 'Go to the website complete the installation'
+echo '- Static IP, SSH, Volume Setup'
+echo '===================================================================================================='
+echo 'Installation complete normally? (yes/no) : '
+read answer
+
+clear
+echo '===================================================================================================='
+echo 'Connect to DSM920+ proceed with additional settings'
+echo 'Make Share Folder and Docker Install'
+echo '- /volume1/Docker/Transmission'
+echo '- /volume1/Docker/Plex'
+echo '- /volume1/Docker/OneDrive'
+echo '- /volume1/FileShare'
+echo '- /volume2/Rclone'
+echo '===================================================================================================='
